@@ -52,7 +52,7 @@ namespace RemoteHub.Classe
         {
             try
             {
-                Debug.WriteLine(Password);
+                //Debug.WriteLine(Password);
                 using (FileStream fileStream = new FileStream(inputFilePath, FileMode.Open))
                 {
                     using (Aes aes = Aes.Create())

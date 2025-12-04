@@ -9,13 +9,23 @@
     <Grid>
         <Button Content="Ajouter un logiciel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="AddRDA_Click"/>
         <ListBox x:Name="ListRDA" Width="425" Height="205" VerticalAlignment="Top" Margin="0,50,0,0">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+             </ListBox.ItemsPanel>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <Button Content="{Binding Icon}" Width="150" Tag="{Binding}"/>
-                        <Button Content="🔑" Width="20" Tag="{Binding}"/>
-                        <Button Content="🗑️" Width="20" Tag="{Binding}" />
-                    </StackPanel>
+                    <Button Width="70" Height="70" Tag="{Binding}" ToolTip.Tip="{Binding Name}">
+                        <Image Source="{Binding IconBitmap}" Stretch="Uniform"/>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Modifier" Tag="{Binding}" Click="ModifyRDA_Click"/>
+                                <MenuItem Header="Supprimer" Tag="{Binding}" Click="DeleteRDA_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

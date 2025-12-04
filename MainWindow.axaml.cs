@@ -1,11 +1,14 @@
+using Avalonia.Controls;
+using Avalonia.Markup.Xaml.Templates;
+using Avalonia.VisualTree;
 using RemoteHub.Classe;
 using RemoteHub.Popup;
-using Avalonia.Controls;
-using Avalonia.VisualTree;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace RemoteHub
 {
@@ -42,15 +45,11 @@ namespace RemoteHub
                 if (container is ListBoxItem listBoxItem)
                 {
                     var buttons = listBoxItem.GetVisualDescendants().OfType<Button>().ToList();
-                    if (buttons.Count == 3)
+                    if (buttons.Count == 1)
                     {
                         buttons[0].Click -= OpenRDA_Click;    // Open button
-                        buttons[1].Click -= ModifyRDA_Click;   // Modify button
-                        buttons[2].Click -= DeleteRDA_Click; // Delete button
 
                         buttons[0].Click += OpenRDA_Click;    // Open button
-                        buttons[1].Click += ModifyRDA_Click;   // Modify button
-                        buttons[2].Click += DeleteRDA_Click; // Delete button
                     }
                 }
             }
@@ -79,7 +78,7 @@ namespace RemoteHub
         #region Interactions RDA
         private void ModifyRDA_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is RDAEntry rdaEntry)
+            if (sender is MenuItem menu && menu.Tag is RDAEntry rdaEntry)
             {
                 //OpenModifyRDAWindow(rdaEntry);
             }
@@ -89,16 +88,70 @@ namespace RemoteHub
         {
             if (sender is Button button && button.DataContext is RDAEntry rdaEntry)
             {
-                //OpenRDAConnection(rdaEntry);
+                //penRDAConnection(rdaEntOry);
+                string tempPath = Path.Combine(Path.GetTempPath(), $"{rdaEntry.Name}.rdp");
+                string rdpContent = $@"
+                full address:s:{rdaEntry.Address}
+                remoteapplicationmode:i:1
+                remoteapplicationprogram:s:{rdaEntry.Software}
+                username:s:{rdaEntry.Username}
+                desktopscalefactor:i:100
+                compression:i:1
+                keyboardhook:i:2
+                connection type:i:7
+                networkautodetect:i:1
+                server port:i:3389
+                authentication level:i:2
+                promptcredentialonce:i:0
+                prompt for credentials:i:0
+                negotiate security layer:i:1
+                enablecredsspsupport:i:1
+                clipboard flags:i:51
+                drivestoredirect:s:C:\;
+                ";
+                File.WriteAllText(tempPath, rdpContent);
+
+                //intégré les features
+
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    var Proc = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "mstsc.exe",
+                        Arguments = $"\"{tempPath}\"",
+                        UseShellExecute = true
+                    });
+
+                    Proc.WaitForExit(); ;
+                    File.Delete(tempPath);
+
+                    //ajout api pour enrgistrement du mdp
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    var Proc = Process.Start(new ProcessStartInfo
+                    {
+                        FileName = "thincast-client",
+                        Arguments = $"--user {rdaEntry.Username} --password {rdaEntry.Password} {rdaEntry.Address}",
+                        UseShellExecute = true
+                    });
+
+                    Proc.WaitForExit(); ;
+                    File.Delete(tempPath);
+
+                    //a voir pour sa
+                }
             }
         }
 
         private void DeleteRDA_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
-            if (sender is Button button && button.DataContext is RDAEntry rdaEntry)
+            if (sender is MenuItem menu && menu.Tag is RDAEntry rdaEntry)
             {
-                //DeleteRDAEntry(rdaEntry);
+                rdaManager.DeleteRDA(rdaEntry);
+                UpdateRDAList();
             }
+            UpdateRDAList();
         }
         #endregion
     }

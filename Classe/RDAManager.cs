@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -64,7 +65,7 @@ namespace RemoteHub.Classe
                 foreach (var line in lines)
                 {
                     var parts = line.Split(new[] { "||" }, StringSplitOptions.None);
-                    if (parts.Length == 4)
+                    if (parts.Length == 7)
                     {
                         sites.Add(new RDAEntry
                         {
@@ -72,8 +73,9 @@ namespace RemoteHub.Classe
                             Address = parts[1],
                             Username = parts[2],
                             Password = parts[3],
-                            Features = parts[4],
-                            Icon = Convert.FromBase64String(parts[5])
+                            Software = parts[4],
+                            Features = parts[5],
+                            Icon = parts[6]
                         });
                     }
                 }
@@ -83,9 +85,9 @@ namespace RemoteHub.Classe
         #endregion
 
         #region Manipulations des données
-        public void AddRDA(RDAEntry entry)
+        public void AddRDA(string Name, string Address, string Username, string Password, string Software, string Features, string Icon)
         {
-            var line = $"{entry.Name}||{entry.Address}||{entry.Username}||{entry.Password}||{entry.Features}||{Convert.ToBase64String(entry.Icon)}";
+            var line = $"{Name}||{Address}||{Username}||{Password}||{Software}||{Features}||{Icon}";
             File.AppendAllLines(filePath, new[] { line });
             Chiffrement();
         }
@@ -109,15 +111,16 @@ namespace RemoteHub.Classe
                 for (int i = 0; i < lines.Count; i++)
                 {
                     var parts = lines[i].Split(new[] { "||" }, StringSplitOptions.None);
-                    if (parts.Length == 6 &&
+                    if (parts.Length == 7 &&
                         parts[0] == oldEntry.Name &&
                         parts[1] == oldEntry.Address &&
                         parts[2] == oldEntry.Username &&
                         parts[3] == oldEntry.Password &&
-                        parts[4] == oldEntry.Features &&
-                        parts[5] == Convert.ToBase64String(oldEntry.Icon))
+                        parts[4] == oldEntry.Software &&
+                        parts[5] == oldEntry.Features &&
+                        parts[6] == oldEntry.Icon)
                     {
-                        lines[i] = $"{newEntry.Name}||{newEntry.Address}||{newEntry.Username}||{newEntry.Password}||{newEntry.Features}||{newEntry.Icon}";
+                        lines[i] = $"{newEntry.Name}||{newEntry.Address}||{newEntry.Username}||{newEntry.Password}||{newEntry.Software}||{newEntry.Features}||{newEntry.Icon}";
                         break;
                     }
                 }

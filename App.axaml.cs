@@ -26,6 +26,9 @@ namespace RemoteHub
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
             {
                 desktop.MainWindow = new MainWindow();
+
+                desktop.Exit += OnAppExit;
+                AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
             }
 
             base.OnFrameworkInitializationCompleted();
