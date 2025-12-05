@@ -107,6 +107,7 @@ namespace RemoteHub
                 negotiate security layer:i:1
                 enablecredsspsupport:i:1
                 clipboard flags:i:51
+                enablerdsaadauth:i:0
                 drivestoredirect:s:C:\;
                 ";
                 File.WriteAllText(tempPath, rdpContent);
@@ -115,6 +116,9 @@ namespace RemoteHub
 
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
+                    string target = $"TERMSRV/{rdaEntry.Address}";
+                    
+                    CredentialManager.SaveCredential(target, rdaEntry.Username, rdaEntry.Password);
                     var Proc = Process.Start(new ProcessStartInfo
                     {
                         FileName = "mstsc.exe",
@@ -122,10 +126,12 @@ namespace RemoteHub
                         UseShellExecute = true
                     });
 
-                    Proc.WaitForExit(); ;
+                    Proc?.WaitForExit();
+
+                    CredentialManager.DeleteCredential(target);
                     File.Delete(tempPath);
 
-                    //ajout api pour enrgistrement du mdp
+                    //gros probleme de cred qui passe pas merci Windows
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
@@ -139,7 +145,7 @@ namespace RemoteHub
                     Proc.WaitForExit(); ;
                     File.Delete(tempPath);
 
-                    //a voir pour sa
+                    //marche pas
                 }
             }
         }
