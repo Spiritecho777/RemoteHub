@@ -57,20 +57,18 @@ namespace RemoteHub.Classe
             var cred = new CREDENTIAL
             {
                 Flags = 0,
-                Type = 2,
+                Type = 1,
                 TargetName = targetPtr,
                 Comment = IntPtr.Zero,
                 LastWritten = new FILETIME(),
                 CredentialBlobSize = (uint)passwordBytes.Length,
                 CredentialBlob = passwordPtr,
-                Persist = 3,
+                Persist = 2,
                 AttributeCount = 0,
                 Attributes = IntPtr.Zero,
                 TargetAlias = IntPtr.Zero,
                 UserName = usernamePtr
             };
-
-                Debug.WriteLine($"Type: {cred.Type}, Persist: {cred.Persist}, BlobSize: {cred.CredentialBlobSize}");
 
                 bool written = NativeMethods.CredWrite(ref cred, 0);
 
@@ -80,8 +78,6 @@ namespace RemoteHub.Classe
                     Debug.WriteLine($"CredWrite failed with error {error}");
                     throw new System.ComponentModel.Win32Exception(error);
                 }
-
-                Debug.WriteLine("Credential saved successfully!");
         }
 
         public static void DeleteCredential(string target)

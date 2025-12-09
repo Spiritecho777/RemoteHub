@@ -130,22 +130,22 @@ namespace RemoteHub
 
                     CredentialManager.DeleteCredential(target);
                     File.Delete(tempPath);
-
-                    //gros probleme de cred qui passe pas merci Windows
                 }
                 else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
                 {
+                    var parts = rdaEntry.Username.Split('\\');
+                    string domain = parts[0];
+                    string user = parts[1];
+
                     var Proc = Process.Start(new ProcessStartInfo
                     {
-                        FileName = "thincast-client",
-                        Arguments = $"--user {rdaEntry.Username} --password {rdaEntry.Password} {rdaEntry.Address}",
+                        FileName = "xfreerdp",
+                        Arguments = $"/u:{user} /p:\"{rdaEntry.Password}\" /v:{rdaEntry.Address} /app:\"{rdaEntry.Software}\"",
                         UseShellExecute = true
                     });
 
                     Proc.WaitForExit(); ;
                     File.Delete(tempPath);
-
-                    //marche pas
                 }
             }
         }
