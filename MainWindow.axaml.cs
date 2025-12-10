@@ -80,7 +80,9 @@ namespace RemoteHub
         {
             if (sender is MenuItem menu && menu.Tag is RDAEntry rdaEntry)
             {
-                //OpenModifyRDAWindow(rdaEntry);
+                var popup = new ModifyRDAPopup(rdaEntry);
+                popup.Closed += (_, _) => UpdateRDAList();
+                popup.Show();
             }
         }
 
