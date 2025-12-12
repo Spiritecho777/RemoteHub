@@ -11,8 +11,8 @@
     <TextBox x:Name="Name" Watermark="Nom d'utilisateur (DOMAIN\USER)" Height="15" Width="280" Margin="5,90,0,0" VerticalAlignment="Top"/>
     <TextBox x:Name="Password" Watermark="Mot de passe" PasswordChar="*" Height="15" Width="280" Margin="5,130,0,0" VerticalAlignment="Top"/>
     <TextBox x:Name="Software" Watermark="Chemin de l'application" Height="15" Width="280" Margin="5,170,0,0" VerticalAlignment="Top"/>
-    <Button Content="" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,50" Click="ChooseIcon_Click"/>
-    <Image x:Name="IconPreview" Width="36" Height="36" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="30,0,0,45"/>
+    <Button Content="Icone" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,50" Click="ChooseIcon_Click"/>
+    <Image x:Name="IconPreview" Width="36" Height="36" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="70,0,0,45"/>
     
     <Button Content="Ajouter" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="Add_Click"/>
     <Button Content="Avances" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="80,0,0,10" Click="Advanced_Click"/>

@@ -6,7 +6,13 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<Platforms>AnyCPU;x64</Platforms>
-    <!--<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>-->
+	<ApplicationIcon>Asset\Icone.ico</ApplicationIcon>
+	
+	<SelfContained>true</SelfContained>
+	<PublishSingleFile>true</PublishSingleFile>
+	<PublishTrimmed>true</PublishTrimmed>
+	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,5 +29,10 @@
 
   <ItemGroup>
     <Folder Include="Control\" />
+	<AvaloniaResource Include="Asset\Icone.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Asset\Icone.ico" />
   </ItemGroup>
 </Project>
