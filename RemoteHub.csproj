@@ -34,5 +34,11 @@
 
   <ItemGroup>
     <Content Include="Asset\Icone.ico" />
+	<Content Include="Asset\install.sh" Link="install.sh">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
+	<Content Include="Asset\Icone.png" Link="Icone.png">
+		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
   </ItemGroup>
 </Project>
