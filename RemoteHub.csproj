@@ -7,7 +7,9 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
 	<Platforms>AnyCPU;x64</Platforms>
 	<ApplicationIcon>Asset\Icone.ico</ApplicationIcon>
-	
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">	
 	<SelfContained>true</SelfContained>
 	<PublishSingleFile>true</PublishSingleFile>
 	<PublishTrimmed>true</PublishTrimmed>
@@ -32,7 +34,7 @@
 	<AvaloniaResource Include="Asset\Icone.png" />
   </ItemGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
     <Content Include="Asset\Icone.ico" />
 	<Content Include="Asset\install.sh" Link="install.sh">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>

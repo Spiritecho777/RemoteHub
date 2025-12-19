@@ -37,11 +37,26 @@ sudo gtk-update-icon-cache /usr/share/icons/hicolor
 if [ -f /etc/os-release ]; then
     source /etc/os-release
     DISTRO=$ID
+    DISTRO_LIKE=$ID_LIKE
 elif command -v lsb_release >/dev/null 2>&1; then
     DISTRO=$(lsb_release -si | tr '[:upper:]' '[:lower:]')
+    DISTRO_LIKE=""
 else
     echo "Impossible de détecter la distribution"
     exit 1
+fi
+
+# Normalisation via ID_LIKE
+if [[ "$DISTRO_LIKE" == *"ubuntu"* ]]; then
+    DISTRO="ubuntu"
+elif [[ "$DISTRO_LIKE" == *"debian"* ]]; then
+    DISTRO="debian"
+elif [[ "$DISTRO_LIKE" == *"fedora"* ]]; then
+    DISTRO="fedora"
+elif [[ "$DISTRO_LIKE" == *"suse"* ]]; then
+    DISTRO="opensuse"
+elif [[ "$DISTRO_LIKE" == *"arch"* ]]; then
+    DISTRO="arch"
 fi
 
 echo "Distribution détectée : $DISTRO"
