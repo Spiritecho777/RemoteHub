@@ -23,11 +23,14 @@ sudo tee "$DESKTOP_FILE" > /dev/null <<EOF
 [Desktop Entry]
 Name=$APP_NAME
 Exec=$APP_NAME
-Icon=$APP_NAME
+Icon=$ICON_DIR/$APP_NAME.png
 Type=Application
 Categories=Utility;
 StartupNotify=true
 EOF
+
+sudo cp "$DESKTOP_FILE" ../$APP_NAME.desktop"
+chmod 777 ../$APP_NAME.desktop"
 
 # Mise à jour caches
 sudo update-desktop-database /usr/share/applications
@@ -62,26 +65,29 @@ fi
 echo "Distribution détectée : $DISTRO"
 
 # Liste des dépendances communes (exemple)
-DEPS="dotnet-sdk-8.0 dotnet-runtime-8.0 freerdp"
+DEPSU="dotnet-sdk-8.0 dotnet-runtime-8.0 freerdp2-x11"
+DEPSA="dotnet-sdk-8.0 dotnet-runtime-8.0 freerdp"
+DEPSF=DEPSA
+DEPSO=DEPSA
 
 # Installation selon la distribution
 case "$DISTRO" in
     ubuntu|debian)
         echo "Installation via apt..."
         sudo apt update
-        sudo apt install -y $DEPS
+        sudo apt install -y $DEPSU
         ;;
     fedora)
         echo "Installation via dnf..."
-        sudo dnf install -y $DEPS
+        sudo dnf install -y $DEPSF
         ;;
     arch)
         echo "Installation via pacman..."
-        sudo pacman -Sy --noconfirm $DEPS
+        sudo pacman -Sy --noconfirm $DEPSA
         ;;
     opensuse*|suse)
         echo "Installation via zypper..."
-        sudo zypper install -y $DEPS
+        sudo zypper install -y $DEPSO
         ;;
     *)
         echo "Distribution non supportée : $DISTRO"
