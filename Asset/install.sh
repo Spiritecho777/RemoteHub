@@ -29,8 +29,8 @@ Categories=Utility;
 StartupNotify=true
 EOF
 
-sudo cp "$DESKTOP_FILE" ../$APP_NAME.desktop"
-chmod 777 ../$APP_NAME.desktop"
+sudo cp "$DESKTOP_FILE" ../$APP_NAME.desktop
+sudo chmod +x ../$APP_NAME.desktop
 
 # Mise à jour caches
 sudo update-desktop-database /usr/share/applications
@@ -94,6 +94,3 @@ case "$DISTRO" in
         exit 1
         ;;
 esac
-
-
-

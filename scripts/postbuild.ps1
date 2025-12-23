@@ -1,5 +1,7 @@
 ﻿param([String]$ProjectName)
 
+Remove-Item "bin/Release" -Recurse -Force -Confirm:$false
+
 Write-Host "=== Starting post-build script ==="
 
 & "C:\Program Files\dotnet\dotnet.exe" publish -c Release -r win-x64 --self-contained true "/p:PublishSingleFile=true" "/p:DebugType=None"
