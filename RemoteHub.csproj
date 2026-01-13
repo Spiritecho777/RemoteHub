@@ -17,6 +17,13 @@
 	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
   </PropertyGroup>
 
+  <PropertyGroup> 
+	<Version>1.0.2</Version> 
+	<AssemblyVersion>1.0.2.0</AssemblyVersion> 
+	<FileVersion>1.0.2.0</FileVersion> 
+	<InformationalVersion>1.0.2</InformationalVersion> 
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.6" />
     <PackageReference Include="Avalonia.Desktop" Version="11.3.6" />
@@ -27,6 +34,7 @@
       <IncludeAssets Condition="'$(Configuration)' != 'Debug'">None</IncludeAssets>
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="MessageBox.Avalonia" Version="3.3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,14 +1,17 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.VisualTree;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using RemoteHub.Classe;
 using RemoteHub.Popup;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace RemoteHub
 {
@@ -110,6 +113,9 @@ namespace RemoteHub
                 enablecredsspsupport:i:1
                 clipboard flags:i:51
                 enablerdsaadauth:i:0
+                audiocapturemode:i:1
+                audiomode:i:0
+                audioqualitymode:i:2
                 drivestoredirect:s:C:\;
                 ";
                 File.WriteAllText(tempPath, rdpContent);
@@ -142,14 +148,22 @@ namespace RemoteHub
                     var Proc = Process.Start(new ProcessStartInfo
                     {
                         FileName = "xfreerdp",
-                        Arguments = $"/u:{user} /p:\"{rdaEntry.Password}\" /v:{rdaEntry.Address} /app:\"{rdaEntry.Software}\"",
-                        UseShellExecute = true
+                        Arguments = $"/u:{user} /p:\"{rdaEntry.Password}\" /v:{rdaEntry.Address} /app:\"{rdaEntry.Software}\" /dynamic-resolution",
+                        UseShellExecute = false
                     });
 
-                    Proc.WaitForExit(); ;
+                    //Proc.WaitForExit(); ;
                     File.Delete(tempPath);
                 }
             }
+        }
+
+        private async void About_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            var infoVersion = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+            string version = infoVersion?.Split('+')[0];
+            var box = MessageBoxManager.GetMessageBoxStandard("Version", "Version: " + version, ButtonEnum.Ok); 
+            await box.ShowAsync();
         }
 
         private void DeleteRDA_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

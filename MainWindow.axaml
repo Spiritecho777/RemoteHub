@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="265"
         x:Class="RemoteHub.MainWindow"
-        Title="RemoteHub" Height="265" Width="450" Icon="/Asset/Icone.png">
+        Title="RemoteHub" Height="265" Width="450" Icon="/Asset/Icone.png" CanResize="False">
 
     <Grid>
         <Button Content="Ajouter un logiciel" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10" Click="AddRDA_Click"/>
+        <Button Content="?" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10" Click="About_Click"/>
         <ListBox x:Name="ListRDA" Width="425" Height="205" VerticalAlignment="Top" Margin="0,50,0,0">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
