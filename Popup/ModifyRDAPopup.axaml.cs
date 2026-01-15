@@ -5,6 +5,7 @@ using RemoteHub.Classe;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace RemoteHub.Popup;
 
@@ -21,15 +22,10 @@ public partial class ModifyRDAPopup : Window
         Password.Text = rdaEntry.Password;
         Address.Text = rdaEntry.Address;
         Software.Text = rdaEntry.Software;
-        //Features.Text = rdaEntry.Features;
         IconPreview.Source = rdaEntry.IconBitmap;
         _iconBytes = Convert.FromBase64String(rdaEntry.Icon);
-    }
-
-    private void Advanced_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //var advancedPopup = new AdvancedRDAPopup();
-        //advancedPopup.ShowDialog(this);
+        if(Software.Text == "") { RDP.IsChecked = true; } else { RDP.IsChecked = false; }
+        if(rdaEntry.Features.Contains("Son")) { Son.IsChecked = true; } else { Son.IsChecked = false; }
     }
 
     private async void ChooseIcon_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -76,30 +72,66 @@ public partial class ModifyRDAPopup : Window
         string rdaUser = Name?.Text?.Trim() ?? "";
         string rdaPassword = Password?.Text?.Trim() ?? "";
         string rdaAddress = Address?.Text?.Trim() ?? "";
-        string rdaSoftware = Software?.Text?.Trim() ?? "";
-        string iconBytes = (_iconBytes != null && _iconBytes.Length > 0) ? Convert.ToBase64String(_iconBytes) : "";
-        Debug.WriteLine("Icon Bytes Length: " + rdaPassword);
-        if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress) || string.IsNullOrEmpty(iconBytes))
+        string features;
+        if (Son.IsChecked == true) { features = "Son"; } else { features = ""; }
+
+        if (RDP.IsChecked == true)
         {
-            new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
-            return;
+            string rdaSoftware = "";
+            string iconBytes = "";
+            var assembly = Assembly.GetExecutingAssembly();
+            using Stream stream = assembly.GetManifestResourceStream("RemoteHub.Asset.rdp_icon.png");
+            using MemoryStream ms = new MemoryStream(); stream.CopyTo(ms);
+            iconBytes = Convert.ToBase64String(ms.ToArray());
+
+            if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress))
+            {
+                new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
+                return;
+            }
+            else
+            {
+                RDAEntry newEntry = new RDAEntry()
+                {
+                    Name = rdaName,
+                    Address = rdaAddress,
+                    Username = rdaUser,
+                    Password = rdaPassword,
+                    Software = rdaSoftware,
+                    Features = features,
+                    Icon = iconBytes
+                };
+
+                RDAManager rdaManager = new RDAManager();
+                rdaManager.ModifyRDA(oldEntry, newEntry);
+            }
         }
         else
         {
-            RDAEntry newEntry = new RDAEntry()
+            string rdaSoftware = Software?.Text?.Trim() ?? "";
+            string iconBytes = (_iconBytes != null && _iconBytes.Length > 0) ? Convert.ToBase64String(_iconBytes) : "";
+
+            if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress) || string.IsNullOrEmpty(iconBytes))
             {
-                Name = rdaName,
-                Address = rdaAddress,
-                Username = rdaUser,
-                Password = rdaPassword,
-                Software = rdaSoftware,
-                Features = "",
-                Icon = iconBytes
+                new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
+                return;
+            }
+            else
+            {
+                RDAEntry newEntry = new RDAEntry()
+                {
+                    Name = rdaName,
+                    Address = rdaAddress,
+                    Username = rdaUser,
+                    Password = rdaPassword,
+                    Software = rdaSoftware,
+                    Features = features,
+                    Icon = iconBytes
+                };
 
-            };
-
-            RDAManager rdaManager = new RDAManager();
-            rdaManager.ModifyRDA(oldEntry,newEntry);
+                RDAManager rdaManager = new RDAManager();
+                rdaManager.ModifyRDA(oldEntry, newEntry);
+            }
         }
         this.Close(true);
     }

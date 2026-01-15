@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace RemoteHub
 {
@@ -93,37 +94,67 @@ namespace RemoteHub
         {
             if (sender is Button button && button.DataContext is RDAEntry rdaEntry)
             {
-                //penRDAConnection(rdaEntOry);
-                string tempPath = Path.Combine(Path.GetTempPath(), $"{rdaEntry.Name}.rdp");
-                string rdpContent = $@"
-                full address:s:{rdaEntry.Address}
-                remoteapplicationmode:i:1
-                remoteapplicationprogram:s:{rdaEntry.Software}
-                username:s:{rdaEntry.Username}
-                desktopscalefactor:i:100
-                compression:i:1
-                keyboardhook:i:2
-                connection type:i:7
-                networkautodetect:i:1
-                server port:i:3389
-                authentication level:i:2
-                promptcredentialonce:i:0
-                prompt for credentials:i:0
-                negotiate security layer:i:1
-                enablecredsspsupport:i:1
-                clipboard flags:i:51
-                enablerdsaadauth:i:0
-                audiocapturemode:i:1
-                audiomode:i:0
-                audioqualitymode:i:2
-                drivestoredirect:s:C:\;
-                ";
-                File.WriteAllText(tempPath, rdpContent);
-
-                //intégré les features
-
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
+                    string tempPath = Path.Combine(Path.GetTempPath(), $"{rdaEntry.Name}.rdp");
+
+                    /*string rdpContent = $@"
+                    full address:s:{rdaEntry.Address}
+                    username:s:{rdaEntry.Username}
+                    desktopscalefactor:i:100
+                    compression:i:1
+                    keyboardhook:i:2
+                    connection type:i:7
+                    networkautodetect:i:1
+                    server port:i:3389
+                    authentication level:i:2
+                    promptcredentialonce:i:0
+                    prompt for credentials:i:0
+                    negotiate security layer:i:1
+                    enablecredsspsupport:i:1
+                    clipboard flags:i:51
+                    enablerdsaadauth:i:0
+                    drivestoredirect:s:C:\;
+                    ";
+                    File.WriteAllText(tempPath, rdpContent);*/
+
+                    var sb = new StringBuilder(); 
+                    sb.AppendLine($"full address:s:{rdaEntry.Address}"); 
+                    sb.AppendLine($"username:s:{rdaEntry.Username}"); 
+                    sb.AppendLine("desktopscalefactor:i:100"); 
+                    sb.AppendLine("compression:i:1"); 
+                    sb.AppendLine("keyboardhook:i:2"); 
+                    sb.AppendLine("connection type:i:7"); 
+                    sb.AppendLine("networkautodetect:i:1"); 
+                    sb.AppendLine("server port:i:3389"); 
+                    sb.AppendLine("authentication level:i:2"); 
+                    sb.AppendLine("promptcredentialonce:i:0"); 
+                    sb.AppendLine("prompt for credentials:i:0"); 
+                    sb.AppendLine("negotiate security layer:i:1"); 
+                    sb.AppendLine("enablecredsspsupport:i:1"); 
+                    sb.AppendLine("clipboard flags:i:51"); 
+                    sb.AppendLine("enablerdsaadauth:i:0"); 
+                    sb.AppendLine("drivestoredirect:s:C:\\;");
+                
+                    // Ajout conditionnel des features 
+                
+                    // RemoteApp
+                    if (!string.IsNullOrWhiteSpace(rdaEntry.Software))
+                    { 
+                        sb.AppendLine("remoteapplicationmode:i:1");
+                        sb.AppendLine($"remoteapplicationprogram:s:{rdaEntry.Software}"); 
+                    } 
+                
+                    // Audio
+                    if (rdaEntry.Features.Contains("Son")) 
+                    { 
+                        sb.AppendLine("audiocapturemode:i:1"); 
+                        sb.AppendLine("audiomode:i:0"); 
+                        sb.AppendLine("audioqualitymode:i:2"); 
+                    }
+
+                    File.WriteAllText(tempPath, sb.ToString());
+
                     string target = $"TERMSRV/{rdaEntry.Address}";
                     
                     CredentialManager.SaveCredential(target, rdaEntry.Username, rdaEntry.Password);
@@ -144,16 +175,22 @@ namespace RemoteHub
                     var parts = rdaEntry.Username.Split('\\');
                     string domain = parts[0];
                     string user = parts[1];
+                    string args = "";
+
+                    args = $"/u:{user} /p:\"{rdaEntry.Password}\" /v:{rdaEntry.Address} /dynamic-resolution /cert:ignore";
+
+                    if (rdaEntry.Features.Contains("Son")) { args += " /sound:sys:pulse /microphone:sys:pulse"; }
+                    if (rdaEntry.Software != "") { args += $" /app:\"{rdaEntry.Software}\""; }
 
                     var Proc = Process.Start(new ProcessStartInfo
                     {
                         FileName = "xfreerdp",
-                        Arguments = $"/u:{user} /p:\"{rdaEntry.Password}\" /v:{rdaEntry.Address} /app:\"{rdaEntry.Software}\" /dynamic-resolution",
+                        Arguments = args,
                         UseShellExecute = false
                     });
-
+                    Console.WriteLine(Proc.ToString());
                     //Proc.WaitForExit(); ;
-                    File.Delete(tempPath);
+                    //File.Delete(tempPath);
                 }
             }
         }

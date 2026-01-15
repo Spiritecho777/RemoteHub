@@ -18,11 +18,15 @@
   </PropertyGroup>
 
   <PropertyGroup> 
-	<Version>1.0.2</Version> 
-	<AssemblyVersion>1.0.2.0</AssemblyVersion> 
-	<FileVersion>1.0.2.0</FileVersion> 
-	<InformationalVersion>1.0.2</InformationalVersion> 
+	<Version>1.1.1</Version> 
+	<AssemblyVersion>1.1.1.0</AssemblyVersion> 
+	<FileVersion>1.1.1.0</FileVersion> 
+	<InformationalVersion>1.1.1</InformationalVersion> 
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Asset\rdp_icon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.3.6" />
@@ -50,5 +54,9 @@
 	<Content Include="Asset\Icone.png" Link="Icone.png">
 		<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Asset\rdp_icon.png" />
   </ItemGroup>
 </Project>

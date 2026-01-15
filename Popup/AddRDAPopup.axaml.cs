@@ -3,6 +3,7 @@ using RemoteHub.Classe;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 
 namespace RemoteHub.Popup;
 
@@ -12,12 +13,6 @@ public partial class AddRDAPopup : Window
     public AddRDAPopup()
     {
         InitializeComponent();
-    }
-
-    private void Advanced_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        //var advancedPopup = new AdvancedRDAPopup();
-        //advancedPopup.ShowDialog(this);
     }
 
     private async void ChooseIcon_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -64,18 +59,45 @@ public partial class AddRDAPopup : Window
         string rdaUser = Name?.Text?.Trim() ?? "";
         string rdaPassword = Password?.Text?.Trim() ?? "";
         string rdaAddress = Address?.Text?.Trim() ?? "";
-        string rdaSoftware = Software?.Text?.Trim() ?? "";
-        string iconBytes = (_iconBytes != null && _iconBytes.Length > 0) ? Convert.ToBase64String(_iconBytes) : "";
+        string features;
+        if (Son.IsChecked == true) { features = "Son"; } else { features = ""; }
 
-        if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress) || string.IsNullOrEmpty(iconBytes))
+        if (RDP.IsChecked == true)
         {
-            new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
-            return;
+            string rdaSoftware = "";
+
+            string iconBytes = ""; 
+            var assembly = Assembly.GetExecutingAssembly(); 
+            using Stream stream = assembly.GetManifestResourceStream("RemoteHub.Asset.rdp_icon.png"); 
+            using MemoryStream ms = new MemoryStream(); stream.CopyTo(ms); 
+            iconBytes = Convert.ToBase64String(ms.ToArray());
+
+            if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress))
+            {
+                new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
+                return;
+            }
+            else
+            {
+                RDAManager rdaManager = new RDAManager();
+                rdaManager.AddRDA(rdaName, rdaAddress, rdaUser, rdaPassword, rdaSoftware, features, iconBytes); 
+            }
         }
         else
         {
-            RDAManager rdaManager = new RDAManager();
-            rdaManager.AddRDA(rdaName, rdaAddress, rdaUser, rdaPassword,rdaSoftware, null, iconBytes);
+            string rdaSoftware = Software?.Text?.Trim() ?? "";
+            string iconBytes = (_iconBytes != null && _iconBytes.Length > 0) ? Convert.ToBase64String(_iconBytes) : "";
+
+            if (string.IsNullOrWhiteSpace(rdaName) || string.IsNullOrEmpty(rdaUser) || string.IsNullOrEmpty(rdaPassword) || string.IsNullOrEmpty(rdaAddress) || string.IsNullOrEmpty(iconBytes))
+            {
+                new AlerteWindow("Les champs sont obligatoires.").ShowDialog(this);
+                return;
+            }
+            else
+            {
+                RDAManager rdaManager = new RDAManager();
+                rdaManager.AddRDA(rdaName, rdaAddress, rdaUser, rdaPassword, rdaSoftware, features, iconBytes);
+            }
         }
         this.Close(true);
     }

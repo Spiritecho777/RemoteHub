@@ -66,7 +66,8 @@ echo "Distribution détectée : $DISTRO"
 
 # Liste des dépendances communes (exemple)
 DEPSU="dotnet-sdk-8.0 dotnet-runtime-8.0 freerdp2-x11"
-DEPSA="dotnet-sdk-8.0 dotnet-runtime-8.0 freerdp"
+DEPSA="dotnet-sdk-8.0 dotnet-runtime-8.0"
+DEPSAA="freerdp"
 DEPSF=DEPSA
 DEPSO=DEPSA
 
@@ -84,6 +85,7 @@ case "$DISTRO" in
     arch)
         echo "Installation via pacman..."
         sudo pacman -Sy --noconfirm $DEPSA
+        sudo yay -S --noconfirm $DEPSAA
         ;;
     opensuse*|suse)
         echo "Installation via zypper..."

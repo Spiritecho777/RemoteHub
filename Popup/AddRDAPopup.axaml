@@ -15,7 +15,8 @@
     <Image x:Name="IconPreview" Width="36" Height="36" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="70,0,0,45"/>
     
     <Button Content="Ajouter" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10" Click="Add_Click"/>
-    <Button Content="Avances" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="80,0,0,10" Click="Advanced_Click"/>
     <Button Content="Annuler" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="10" Click="Cancel_Click"/>
+    <CheckBox x:Name="RDP" Content="RDP" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="130,0,0,50"/>
+    <CheckBox x:Name="Son" Content="Son" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="190,0,0,50"/>
   </Grid>
 </Window>
