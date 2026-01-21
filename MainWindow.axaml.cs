@@ -98,26 +98,6 @@ namespace RemoteHub
                 {
                     string tempPath = Path.Combine(Path.GetTempPath(), $"{rdaEntry.Name}.rdp");
 
-                    /*string rdpContent = $@"
-                    full address:s:{rdaEntry.Address}
-                    username:s:{rdaEntry.Username}
-                    desktopscalefactor:i:100
-                    compression:i:1
-                    keyboardhook:i:2
-                    connection type:i:7
-                    networkautodetect:i:1
-                    server port:i:3389
-                    authentication level:i:2
-                    promptcredentialonce:i:0
-                    prompt for credentials:i:0
-                    negotiate security layer:i:1
-                    enablecredsspsupport:i:1
-                    clipboard flags:i:51
-                    enablerdsaadauth:i:0
-                    drivestoredirect:s:C:\;
-                    ";
-                    File.WriteAllText(tempPath, rdpContent);*/
-
                     var sb = new StringBuilder(); 
                     sb.AppendLine($"full address:s:{rdaEntry.Address}"); 
                     sb.AppendLine($"username:s:{rdaEntry.Username}"); 
