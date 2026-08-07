@@ -4,9 +4,6 @@
 
 Designed for system administrators, IT teams, and power users, RemoteHub provides a centralized interface to manage and launch remote connections without maintaining dozens of `.rdp` files or command-line shortcuts.
 
-![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linuxework](https://img.shields.io/badge/.NET-C%23-purple)
-![UI](https://img.shields.io/badge/UI-Avalonia-blueviolds.io/badge/License-MIT-green
-
 ## Features
 
 - Manage multiple RDP connections from a single interface
@@ -19,10 +16,6 @@ Designed for system administrators, IT teams, and power users, RemoteHub provide
 - Audio redirection support
 - Cross-platform support (Windows & Linux)
 - Lightweight and modern Avalonia UI
-
-## Screenshots
-
-> Add screenshots here
 
 ## How It Works
 
@@ -58,8 +51,6 @@ RemoteHub uses `xfreerdp` to launch remote sessions with the corresponding conne
 - Infrastructure management
 - Homelab and personal servers
 
-## Requirements
-
 ### Windows
 
 - Windows 10 / 11
@@ -69,12 +60,6 @@ RemoteHub uses `xfreerdp` to launch remote sessions with the corresponding conne
 
 - FreeRDP (`xfreerdp`)
 
-Example installation:
-
-```bash
-sudo apt install freerdp2-x11
-```
-
 ## Technology Stack
 
 - C#
@@ -82,23 +67,6 @@ sudo apt install freerdp2-x11
 - Avalonia UI
 - Windows Credential Manager
 - FreeRDP
-
-## Roadmap
-
-- [ ] Connection groups
-- [ ] Search and filtering
-- [ ] Import / Export profiles
-- [ ] Multi-language support
-- [ ] Secure vault integration
-- [ ] Connection statistics
-
-## Build
-
-```bash
-git clone https://github.com/Spiritecho777/RemoteHub.git
-cd RemoteHub
-dotnet build
-```
 
 ## License
 
