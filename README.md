@@ -72,12 +72,6 @@ RemoteHub uses `xfreerdp` to launch remote sessions with the corresponding conne
 
 This project is licensed under the MIT License.
 
-## Contributing
-
-Contributions, bug reports, and feature requests are welcome.
-
-If you have suggestions or improvements, feel free to open an issue or submit a pull request.
-
 ---
 
 Built with ❤️ using Avalonia and .NET.
